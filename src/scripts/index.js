@@ -1,3 +1,4 @@
+import { GameScreen } from './screens/game';
 import { IdleScreen } from './screens/idle';
 
 class SimonSays {
@@ -6,25 +7,35 @@ class SimonSays {
 
     if (!this.root) throw new Error('Root not provided');
 
+    this.currentScreen = null;
+
     this.startGame = this.startGame.bind(this);
 
     this.init();
   }
 
-  startGame(level) {
-    if (!this.root) return;
-
-    console.log(`Start game with level: ${level}`);
-  }
-
-  init() {
+  renderScreen(screenElement) {
     if (!this.root) return;
 
     this.root.innerHTML = '';
 
-    const idleScreen = new IdleScreen().render(this.startGame);
+    this.root.appendChild(screenElement);
+  }
 
-    this.root.appendChild(idleScreen);
+  startGame(level) {
+    if (!this.root) return;
+
+    this.currentScreen = new GameScreen(level);
+    const gameScreenElement = this.currentScreen.render();
+
+    this.renderScreen(gameScreenElement);
+  }
+
+  init() {
+    this.currentScreen = new IdleScreen();
+    const idleScreenElement = this.currentScreen.render(this.startGame);
+
+    this.renderScreen(idleScreenElement);
   }
 }
 

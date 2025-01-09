@@ -1,14 +1,4 @@
-const GAME_LEVELS = {
-  easy: 'easy',
-  medium: 'medium',
-  hard: 'hard',
-};
-
-const GAME_LEVELS_COPY = {
-  easy: 'Easy',
-  medium: 'Medium',
-  hard: 'Hard',
-};
+import { GAME_LEVELS, GAME_LEVELS_COPY } from '../const';
 
 export class IdleScreen {
   getLevelSelect() {
