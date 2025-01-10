@@ -1,45 +1,55 @@
-export class ResultScreen {
+import { AbstractScreen } from './abstract';
+
+export class ResultScreen extends AbstractScreen {
   constructor(isSuccess, round) {
+    super();
     this.isSuccess = isSuccess;
     this.round = round;
   }
 
-  generateTitle() {
-    const title = document.createElement('h2');
-    title.className = 'text-3xl font-bold text-center';
-    title.textContent = this.isSuccess
-      ? `Congratulations! You passed Round ${this.round}`
-      : `Game Over! You failed Round ${this.round}`;
-
-    return title;
+  createTitle() {
+    return this.createElement(
+      'h2',
+      'text-3xl font-bold text-center',
+      this.isSuccess
+        ? `Congratulations! You passed Round ${this.round}`
+        : `Game Over! You failed Round ${this.round}`
+    );
   }
 
-  generatePlayAgainButton(onClick) {
-    const button = document.createElement('button');
-    button.textContent = 'Play Again';
-    button.className = 'px-6 py-2 bg-green-500 text-white rounded-lg mt-4';
+  createPlayAgainButton(onClick) {
+    const button = this.createElement(
+      'button',
+      'px-6 py-2 bg-green-500 text-white rounded-lg mt-4',
+      'Play Again'
+    );
+
     button.addEventListener('click', onClick);
 
     return button;
   }
 
-  generateResetGameButton(onClick) {
-    const button = document.createElement('button');
-    button.textContent = 'Change Difficulty';
-    button.className = 'px-6 py-2 bg-yellow-500 text-white rounded-lg mt-4';
+  createResetGameButton(onClick) {
+    const button = this.createElement(
+      'button',
+      'px-6 py-2 bg-yellow-500 text-white rounded-lg mt-4',
+      'Change Difficulty'
+    );
+
     button.addEventListener('click', onClick);
 
     return button;
   }
 
   render(onPlayAgainClick, onResetClick) {
-    const container = document.createElement('div');
-    container.className =
-      'flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6';
+    const container = this.createElement(
+      'div',
+      'flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6'
+    );
 
-    const message = this.generateTitle();
-    const playAgainButton = this.generatePlayAgainButton(onPlayAgainClick);
-    const resetGameButton = this.generateResetGameButton(onResetClick);
+    const message = this.createTitle();
+    const playAgainButton = this.createPlayAgainButton(onPlayAgainClick);
+    const resetGameButton = this.createResetGameButton(onResetClick);
 
     container.appendChild(message);
     container.appendChild(playAgainButton);

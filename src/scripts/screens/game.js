@@ -1,8 +1,11 @@
 // @ts-nocheck
 import { GAME_LEVEL_CHARACTERS, GAME_LEVELS_COPY } from '../const';
+import { AbstractScreen } from './abstract';
 
-export class GameScreen {
+export class GameScreen extends AbstractScreen {
   constructor(onValidateUserInput) {
+    super();
+
     this.onValidateUserInput = onValidateUserInput;
 
     this.isKeyPressed = false;
@@ -19,64 +22,82 @@ export class GameScreen {
     this.updateSequenceInput('');
   }
 
-  getLevelIndicator() {
-    const indicator = document.createElement('div');
-    indicator.className = 'text-lg font-semibold';
-    indicator.textContent = `Level: ${GAME_LEVELS_COPY[this.level]}`;
-
-    return indicator;
+  createLevelIndicator() {
+    return this.createElement(
+      'div',
+      'text-lg font-semibold',
+      `Level: ${GAME_LEVELS_COPY[this.level]}`
+    );
   }
 
-  getRoundCounter(round = 1) {
-    const counter = document.createElement('div');
-    counter.className = 'text-xl font-bold';
-    counter.textContent = `Round: ${round}`;
-
-    return counter;
+  createRoundCounter(round = 1) {
+    return this.createElement('div', 'text-xl font-bold', `Round: ${round}`);
   }
 
-  getSequenceContainer() {
-    const container = document.createElement('div');
-    container.className =
-      'text-2xl font-semibold text-center mb-4 p-2 border-2 border-gray-300 rounded-lg w-64 uppercase';
-    container.textContent = '';
-
-    return container;
+  createSequenceContainer() {
+    return this.createElement(
+      'div',
+      'text-2xl font-semibold text-center mb-4 p-2 border-2 border-gray-300 rounded-lg w-64 uppercase',
+      ''
+    );
   }
 
-  getSequenceInput() {
-    const input = document.createElement('input');
-    input.className =
-      'text-xl text-center p-2 border-2 border-gray-300 rounded-lg w-64';
-    input.disabled = true;
-
-    return input;
+  createSequenceInput() {
+    return this.createElement(
+      'input',
+      'text-xl text-center p-2 border-2 border-gray-300 rounded-lg w-64',
+      '',
+      { disabled: true }
+    );
   }
 
-  getVirtualKeyboard(level) {
+  createRepeatButton() {
+    const button = this.createElement(
+      'button',
+      'px-6 py-2 bg-yellow-500 text-white rounded-lg mt-4 disabled:bg-opacity-40',
+      'Repeat the Sequence',
+      { disabled: true }
+    );
+
+    button.addEventListener('click', this.handleRetrySequence);
+
+    return button;
+  }
+
+  createNewGameButton(onNewGameClick) {
+    const button = this.createElement(
+      'button',
+      'px-6 py-2 bg-green-500 text-white rounded-lg mt-4',
+      'New Game'
+    );
+
+    button.addEventListener('click', onNewGameClick);
+
+    return button;
+  }
+
+  createVirtualKeyboard(level) {
     const keys = GAME_LEVEL_CHARACTERS[level].split('');
 
-    const container = document.createElement('div');
-    container.className = 'flex flex-wrap gap-2 justify-center';
+    const container = this.createElement(
+      'div',
+      'flex flex-wrap gap-2 justify-center'
+    );
 
     keys.forEach((key) => {
-      const button = document.createElement('button');
-      button.textContent = key;
-      button.className =
-        'px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 uppercase';
-      button.dataset.key = key;
+      const button = this.createElement(
+        'button',
+        'px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 uppercase',
+        key,
+        { dataset: { key } }
+      );
 
       container.appendChild(button);
     });
 
     container.addEventListener('click', (evt) => {
-      const target = evt.target;
-
-      const key = target.dataset.key;
-
-      if (!key) return;
-
-      this.userInputHandler(key);
+      const key = evt.target.dataset.key;
+      if (key) this.userInputHandler(key);
     });
 
     return container;
@@ -166,25 +187,27 @@ export class GameScreen {
 
   render(onNewGameClick, level) {
     this.level = level;
-    const container = document.createElement('div');
-    container.className =
-      'flex flex-col items-center justify-center min-h-screen p-6';
 
-    const levelIndicator = this.getLevelIndicator();
-    this.roundCounter = this.getRoundCounter();
-    this.sequenceContainer = this.getSequenceContainer();
-    this.sequenceInput = this.getSequenceInput();
-    const virtualKeyboard = this.getVirtualKeyboard(this.level);
-    this.repeatButton = this.getRepeatButton();
-    const newGameButton = this.getNewGameButton(onNewGameClick);
+    const container = this.createElement(
+      'div',
+      'flex flex-col items-center justify-center min-h-screen p-6'
+    );
 
-    container.appendChild(levelIndicator);
+    container.appendChild(this.createLevelIndicator());
+    this.roundCounter = this.createRoundCounter();
     container.appendChild(this.roundCounter);
+
+    this.sequenceContainer = this.createSequenceContainer();
     container.appendChild(this.sequenceContainer);
+
+    this.sequenceInput = this.createSequenceInput();
     container.appendChild(this.sequenceInput);
-    container.appendChild(virtualKeyboard);
+
+    container.appendChild(this.createVirtualKeyboard(this.level));
+    this.repeatButton = this.createRepeatButton();
     container.appendChild(this.repeatButton);
-    container.appendChild(newGameButton);
+
+    container.appendChild(this.createNewGameButton(onNewGameClick));
 
     this.addEventListeners();
 
