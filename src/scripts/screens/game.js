@@ -136,12 +136,16 @@ export class GameScreen extends AbstractScreen {
     this.isPreventInput = true;
     if (hasExtraLive) {
       this.repeatButton.disabled = false;
+      this.repeatButton.classList.add('animate-tada');
+      this.sequenceInput.classList.add('bg-red-100', 'border-red-500');
     }
   }
 
   handleRetrySequence() {
     this.updateSequenceInput('');
     this.repeatButton.disabled = true;
+    this.sequenceInput.classList.remove('bg-red-100', 'border-red-500');
+    this.repeatButton.classList.remove('animate-tada');
     this.isPreventInput = false;
   }
 
