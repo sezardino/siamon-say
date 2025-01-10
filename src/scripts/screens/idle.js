@@ -3,6 +3,14 @@ import { GAME_LEVELS, GAME_LEVELS_COPY } from '../const';
 import { AbstractScreen } from './abstract';
 
 export class IdleScreen extends AbstractScreen {
+  createTitle() {
+    return this.createElement(
+      'h1',
+      'text-4xl font-bold text-center mb-6',
+      'Simon Says Game'
+    );
+  }
+
   createLevelSelect() {
     const select = this.createElement(
       'select',
@@ -37,6 +45,7 @@ export class IdleScreen extends AbstractScreen {
       'flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6'
     );
 
+    const title = this.createTitle();
     const levelSelector = this.createLevelSelect();
 
     const startGameHandler = () => {
@@ -46,6 +55,7 @@ export class IdleScreen extends AbstractScreen {
 
     const startButton = this.createStartButton(startGameHandler);
 
+    container.appendChild(title);
     container.appendChild(levelSelector);
     container.appendChild(startButton);
 
