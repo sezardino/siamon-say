@@ -5,21 +5,12 @@ import { AbstractScreen } from './abstract';
 export class GameScreen extends AbstractScreen {
   constructor(onValidateUserInput) {
     super();
-
     this.onValidateUserInput = onValidateUserInput;
-
     this.isKeyPressed = false;
     this.isPreventInput = false;
     this.userInput = '';
 
-    this.stopGame = this.stopGame.bind(this);
     this.handleRetrySequence = this.handleRetrySequence.bind(this);
-  }
-
-  resetScreen() {
-    this.isKeyPressed = false;
-    this.isPreventInput = false;
-    this.updateSequenceInput('');
   }
 
   createLevelIndicator() {
@@ -103,22 +94,32 @@ export class GameScreen extends AbstractScreen {
     return container;
   }
 
-  stopGame(hasExtraLive) {
-    this.isPreventInput = true;
-
-    if (hasExtraLive) this.repeatButton.disabled = false;
+  resetScreen() {
+    this.isKeyPressed = false;
+    this.isPreventInput = false;
+    this.updateSequenceInput('');
   }
 
-  getRepeatButton() {
-    const button = document.createElement('button');
-    button.textContent = 'Repeat the Sequence';
-    button.className =
-      'px-6 py-2 bg-yellow-500 text-white rounded-lg mt-4 disabled:bg-opacity-40';
-    button.disabled = true;
+  startNewRound(sequence, round) {
+    this.sequenceContainer.textContent = sequence;
+    this.isPreventInput = false;
+    this.updateSequenceInput('');
+    this.roundCounter.textContent = `Round: ${round}`;
+  }
 
-    button.addEventListener('click', this.handleRetrySequence);
+  userInputHandler(key) {
+    if (this.isPreventInput || !this.sequenceInput) return;
 
-    return button;
+    const newValue = this.userInput + key;
+    this.updateSequenceInput(newValue);
+    this.onValidateUserInput(newValue);
+  }
+
+  stopGame(hasExtraLive) {
+    this.isPreventInput = true;
+    if (hasExtraLive) {
+      this.repeatButton.disabled = false;
+    }
   }
 
   handleRetrySequence() {
@@ -141,33 +142,6 @@ export class GameScreen extends AbstractScreen {
 
     this.sequenceInput.value = input;
     this.userInput = input;
-  }
-
-  startNewRound(sequence, round) {
-    if (!this.sequenceContainer || !this.roundCounter || !this.repeatButton)
-      return;
-
-    this.sequenceContainer.textContent = sequence;
-
-    this.isPreventInput = false;
-
-    this.updateSequenceInput('');
-
-    this.roundCounter.textContent = `Round: ${round}`;
-  }
-
-  userInputHandler(key) {
-    if (!this.sequenceInput || this.isPreventInput) return;
-
-    const validKeys = GAME_LEVEL_CHARACTERS[this.level];
-
-    if (!validKeys.includes(key)) return;
-
-    const newValue = this.userInput + key;
-
-    this.updateSequenceInput(newValue);
-    console.log(newValue);
-    this.onValidateUserInput(newValue);
   }
 
   addEventListeners() {
