@@ -72,26 +72,43 @@ export class GameScreen extends AbstractScreen {
 
     const container = this.createElement(
       'div',
-      'flex flex-wrap gap-2 justify-center'
+      'mt-4 flex flex-wrap gap-2 justify-center'
     );
 
     keys.forEach((key) => {
       const button = this.createElement(
         'button',
-        'px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 uppercase',
+        'px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 uppercase transition-all duration-150',
         key,
         { dataset: { key } }
       );
-
       container.appendChild(button);
     });
 
     container.addEventListener('click', (evt) => {
       const key = evt.target.dataset.key;
-      if (key) this.userInputHandler(key);
+      if (key) {
+        this.userInputHandler(key);
+        this.addKeyHighlight(evt.target);
+        this.addPulseAnimation(evt.target);
+      }
     });
 
     return container;
+  }
+
+  addPulseAnimation(button) {
+    button.classList.add('animate-tada');
+    setTimeout(() => {
+      button.classList.remove('animate-tada');
+    }, 1000);
+  }
+
+  addKeyHighlight(button) {
+    button.classList.add('bg-blue-500', 'text-white');
+    setTimeout(() => {
+      button.classList.remove('bg-blue-500', 'text-white');
+    }, 200);
   }
 
   resetScreen() {
@@ -140,8 +157,29 @@ export class GameScreen extends AbstractScreen {
   updateSequenceInput(input) {
     if (!this.sequenceInput) return;
 
+    this.sequenceInput.classList.add(
+      'bg-yellow-100',
+      'transition-all',
+      'duration-300'
+    );
+
+    setTimeout(() => {
+      this.sequenceInput.classList.remove('bg-yellow-100');
+    }, 300);
+
+    this.sequenceInput.style.transform = 'scale(1.1)';
+    setTimeout(() => {
+      this.sequenceInput.style.transform = 'scale(1)';
+    }, 300);
+
     this.sequenceInput.value = input;
     this.userInput = input;
+  }
+
+  getButtonByKey(key) {
+    return Array.from(document.querySelectorAll('button[data-key]')).find(
+      (button) => button.dataset.key === key
+    );
   }
 
   addEventListeners() {
@@ -152,6 +190,11 @@ export class GameScreen extends AbstractScreen {
       const key = evt.key.toLowerCase();
 
       this.userInputHandler(key);
+      const button = this.getButtonByKey(key);
+      if (button) {
+        this.addKeyHighlight(button);
+        this.addPulseAnimation(button);
+      }
 
       setTimeout(() => {
         this.isKeyPressed = false;

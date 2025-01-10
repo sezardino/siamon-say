@@ -101,5 +101,3 @@ class SimonSays {
 }
 
 new SimonSays('#app');
-
-new SimonSays('#app');
