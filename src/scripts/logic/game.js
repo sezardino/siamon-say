@@ -30,9 +30,11 @@ export class GameState {
   }
 
   validateInput(input) {
-    if (input === this.sequence) {
+    const loverInput = input.toLowerCase();
+
+    if (loverInput === this.sequence) {
       return 'correct';
-    } else if (!this.sequence.startsWith(input)) {
+    } else if (!this.sequence.startsWith(loverInput)) {
       return 'incorrect';
     }
     return 'continue';

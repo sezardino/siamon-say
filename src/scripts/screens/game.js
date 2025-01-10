@@ -36,7 +36,7 @@ export class GameScreen extends AbstractScreen {
   createSequenceInput() {
     return this.createElement(
       'input',
-      'text-xl text-center p-2 border-2 border-gray-300 rounded-lg w-64',
+      'text-xl text-center p-2 border-2 border-gray-300 rounded-lg w-64 uppercase',
       '',
       { disabled: true }
     );
@@ -118,7 +118,36 @@ export class GameScreen extends AbstractScreen {
   }
 
   startNewRound(sequence, round) {
-    this.sequenceContainer.textContent = sequence;
+    const wrapper = this.createElement(
+      'div',
+      'transition-opacity duration-1000 ease-in-out'
+    );
+
+    this.sequenceContainer.innerHTML = '';
+
+    const characters = sequence.split('');
+    characters.forEach((char, index) => {
+      const charElement = this.createElement(
+        'span',
+        'inline-block opacity-0 transition-opacity duration-300 ease-in-out',
+        char
+      );
+      wrapper.appendChild(charElement);
+
+      charElement.style.animationDelay = `${index * 1000}ms`;
+
+      setTimeout(() => {
+        charElement.classList.add('opacity-100');
+      }, index * 200);
+    });
+
+    this.sequenceContainer.appendChild(wrapper);
+
+    setTimeout(() => {
+      wrapper.classList.remove('opacity-100');
+      wrapper.classList.add('opacity-0');
+    }, 2000);
+
     this.isPreventInput = false;
     this.updateSequenceInput('');
     this.roundCounter.textContent = `Round: ${round}`;
