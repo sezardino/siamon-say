@@ -156,6 +156,10 @@ export class GameScreen extends AbstractScreen {
   userInputHandler(key) {
     if (this.isPreventInput || !this.sequenceInput) return;
 
+    const validCharacters = GAME_LEVEL_CHARACTERS[this.level];
+
+    if (!validCharacters.includes(key)) return;
+
     const newValue = this.userInput + key;
     this.updateSequenceInput(newValue);
     this.onValidateUserInput(newValue);
