@@ -27,10 +27,10 @@ export class ResultScreen extends AbstractScreen {
 
     const buttonsContainer = this.createElement(
       'div',
-      'mt-4 flex flex-wrap gap-2 items-center'
+      'mt-4 flex flex-wrap gap-2 items-center justify-center'
     );
 
-    const playAgainButton = new Button('Play Again', 'green', onPlayAgainClick)
+    const playAgainButton = new Button('New Game', 'green', onPlayAgainClick)
       .element;
     const resetGameButton = new Button(
       'Change difficulty',
