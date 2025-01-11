@@ -130,6 +130,8 @@ export class GameScreen extends AbstractScreen {
       this.setExtraLive(false);
     }
 
+    if (!isRepeat && this.round !== 1) this.provideFeedback(true);
+
     this.isPreventInput = true;
     this.sequenceInput.disabled = true;
     this.updateSequenceInput('');
@@ -180,6 +182,7 @@ export class GameScreen extends AbstractScreen {
       this.repeatButton.disabled = false;
       this.repeatButton.classList.add('animate-tada');
       this.sequenceInput.classList.add('bg-red-100', 'border-red-500');
+      this.provideFeedback(false);
     }
   }
 
@@ -234,6 +237,24 @@ export class GameScreen extends AbstractScreen {
     });
   }
 
+  provideFeedback(isCorrect) {
+    const message = isCorrect ? 'Correct sequence' : 'Incorrect sequence';
+    const textColor = isCorrect ? 'text-green-500' : 'text-red-500';
+
+    const feedback = new Typography(
+      message,
+      'xl',
+      'p',
+      `${textColor} absolute bottom-40 left-1/2 -translate-x-1/2`
+    ).element;
+
+    this.screenRoot.appendChild(feedback);
+
+    setTimeout(() => {
+      this.screenRoot.removeChild(feedback);
+    }, 5000);
+  }
+
   render(onNewGameClick, level) {
     this.level = level;
 
@@ -241,6 +262,7 @@ export class GameScreen extends AbstractScreen {
       'div',
       'flex flex-col items-center justify-center min-h-screen p-6'
     );
+    this.screenRoot = container;
 
     this.roundCounter = this.createRoundCounter();
 
