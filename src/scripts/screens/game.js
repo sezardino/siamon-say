@@ -122,7 +122,7 @@ export class GameScreen extends AbstractScreen {
       setTimeout(() => {
         charElement.classList.add('opacity-100');
         this.highlightKey(char);
-      }, index * 200);
+      }, index * 1000);
     });
 
     this.sequenceContainer.appendChild(wrapper);
@@ -132,10 +132,11 @@ export class GameScreen extends AbstractScreen {
       wrapper.classList.add('opacity-0');
 
       onFinishAnimation();
-    }, sequence.length * 400);
+    }, sequence.length * 1000);
   }
 
   prepareForNextRound(onNextRoundClick) {
+    this.isPreventInput = true;
     const nextRoundButton = new Button('Next round', 'primary', () => {
       onNextRoundClick();
       nextRoundButton.element.replaceWith(this.repeatButton);
@@ -160,6 +161,7 @@ export class GameScreen extends AbstractScreen {
       this.setExtraLive(false);
     }
 
+    this.removeFeedback();
     this.isPreventInput = true;
     this.sequenceInput.disabled = true;
     this.updateSequenceInput('');
@@ -279,18 +281,20 @@ export class GameScreen extends AbstractScreen {
     const message = isCorrect ? 'Correct sequence' : 'Incorrect sequence';
     const textColor = isCorrect ? 'text-green-500' : 'text-red-500';
 
-    const feedback = new Typography(
+    this.feedback = new Typography(
       message,
       'xl',
       'p',
       `${textColor} absolute bottom-40 left-1/2 -translate-x-1/2`
     ).element;
 
-    this.screenRoot.appendChild(feedback);
+    this.screenRoot.appendChild(this.feedback);
+  }
 
-    setTimeout(() => {
-      this.screenRoot.removeChild(feedback);
-    }, 5000);
+  removeFeedback() {
+    if (!this.screenRoot.contains(this.feedback)) return;
+
+    this.screenRoot.removeChild(this.feedback);
   }
 
   render(onNewGameClick, level) {
