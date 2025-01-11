@@ -5,6 +5,18 @@ import { Typography } from '../components/typography';
 import { GAME_LEVEL_CHARACTERS, GAME_LEVELS_COPY } from '../const/game';
 import { AbstractScreen } from './abstract';
 
+const CORRECT_SEQUENCE_INPUT_BG = '!bg-green-100';
+const CORRECT_SEQUENCE_INPUT_BORDER = '!bg-green-100';
+const DEFAULT_SEQUENCE_INPUT_BG = 'bg-yellow-100';
+const IN_CORRECT_SEQUENCE_INPUT_BG = 'bg-red-100';
+const IN_CORRECT_SEQUENCE_INPUT_BORDER = 'border-red-500';
+
+const KEY_HIGHLIGHT_BG = '!bg-blue-500';
+const KEY_HIGHLIGHT_COLOR = 'text-white';
+const KEY_FEEDBACK_HIGHLIGHT_BG = '!bg-yellow-500';
+
+const TADA_ANIMATION = 'animate-tada';
+
 export class GameScreen extends AbstractScreen {
   constructor(onValidateUserInput, setExtraLive) {
     super();
@@ -71,8 +83,12 @@ export class GameScreen extends AbstractScreen {
   }
 
   addKeyAnimation(button) {
-    this.addTempClasses(button, ['animate-tada'], 1000);
-    this.addTempClasses(button, ['!bg-yellow-500', 'text-white'], 200);
+    this.addTempClasses(button, [TADA_ANIMATION], 1000);
+    this.addTempClasses(
+      button,
+      [KEY_FEEDBACK_HIGHLIGHT_BG, KEY_HIGHLIGHT_COLOR],
+      200
+    );
   }
 
   resetScreen() {
@@ -119,6 +135,20 @@ export class GameScreen extends AbstractScreen {
     }, sequence.length * 400);
   }
 
+  prepareForNextRound(onNextRoundClick) {
+    const nextRoundButton = new Button('Next round', 'primary', () => {
+      onNextRoundClick();
+      nextRoundButton.element.replaceWith(this.repeatButton);
+    });
+
+    this.sequenceInput.classList.add(
+      CORRECT_SEQUENCE_INPUT_BG,
+      CORRECT_SEQUENCE_INPUT_BORDER
+    );
+    this.provideFeedback(true);
+    this.repeatButton.replaceWith(nextRoundButton.element);
+  }
+
   startNewRound(sequence, round, isRepeat = false) {
     if (!this.sequenceContainer || !this.roundCounter) return;
 
@@ -130,14 +160,16 @@ export class GameScreen extends AbstractScreen {
       this.setExtraLive(false);
     }
 
-    if (!isRepeat && this.round !== 1) this.provideFeedback(true);
-
     this.isPreventInput = true;
     this.sequenceInput.disabled = true;
     this.updateSequenceInput('');
-    this.sequenceInput.classList.remove('bg-yellow-100');
+    this.sequenceInput.classList.remove(
+      CORRECT_SEQUENCE_INPUT_BG,
+      CORRECT_SEQUENCE_INPUT_BORDER
+    );
+    this.sequenceInput.classList.remove(DEFAULT_SEQUENCE_INPUT_BG);
 
-    this.repeatButton.classList.remove('animate-tada');
+    this.repeatButton.classList.remove(TADA_ANIMATION);
 
     this.repeatButton.disabled = true;
     this.newGameButton.disabled = true;
@@ -147,7 +179,7 @@ export class GameScreen extends AbstractScreen {
       this.newGameButton.disabled = false;
       this.isPreventInput = false;
       this.sequenceInput.disabled = false;
-      this.sequenceInput.classList.add('bg-yellow-100');
+      this.sequenceInput.classList.add(DEFAULT_SEQUENCE_INPUT_BG);
     });
   }
 
@@ -155,10 +187,10 @@ export class GameScreen extends AbstractScreen {
     const button = this.getButtonByKey(key);
     if (!button) return;
 
-    button.classList.add('!bg-blue-500', 'text-white');
+    button.classList.add(KEY_HIGHLIGHT_BG, KEY_HIGHLIGHT_COLOR);
 
     setTimeout(() => {
-      button.classList.remove('!bg-blue-500', 'text-white');
+      button.classList.remove(KEY_HIGHLIGHT_BG, KEY_HIGHLIGHT_COLOR);
     }, 300);
   }
 
@@ -180,8 +212,11 @@ export class GameScreen extends AbstractScreen {
     this.isPreventInput = true;
     if (hasExtraLive) {
       this.repeatButton.disabled = false;
-      this.repeatButton.classList.add('animate-tada');
-      this.sequenceInput.classList.add('bg-red-100', 'border-red-500');
+      this.repeatButton.classList.add(TADA_ANIMATION);
+      this.sequenceInput.classList.add(
+        IN_CORRECT_SEQUENCE_INPUT_BG,
+        IN_CORRECT_SEQUENCE_INPUT_BORDER
+      );
       this.provideFeedback(false);
     }
   }
@@ -191,8 +226,11 @@ export class GameScreen extends AbstractScreen {
 
     this.updateSequenceInput('');
     this.repeatButton.disabled = true;
-    this.sequenceInput.classList.remove('bg-red-100', 'border-red-500');
-    this.repeatButton.classList.remove('animate-tada');
+    this.sequenceInput.classList.remove(
+      IN_CORRECT_SEQUENCE_INPUT_BG,
+      IN_CORRECT_SEQUENCE_INPUT_BORDER
+    );
+    this.repeatButton.classList.remove(TADA_ANIMATION);
     this.isPreventInput = false;
 
     this.startNewRound(this.sequenceContainer.textContent, this.round, true);

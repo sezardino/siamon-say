@@ -60,10 +60,13 @@ class SimonSays {
     if (result === 'correct') {
       const nextRoundResult = this.gameState.nextRound();
       if (nextRoundResult === 'continue') {
-        this.gameScreen.startNewRound(
-          this.gameState.sequence,
-          this.gameState.round
-        );
+        this.gameScreen.prepareForNextRound(() => {
+          if (!this.gameScreen || !this.gameState) return;
+          this.gameScreen.startNewRound(
+            this.gameState.sequence,
+            this.gameState.round
+          );
+        });
       } else if (nextRoundResult === 'finished') {
         this.finishGame(true);
       }
