@@ -187,7 +187,6 @@ export class GameScreen extends AbstractScreen {
   }
 
   highlightKey(key) {
-    if (this.isPreventInput) return;
     const button = this.getButtonByKey(key);
     if (!button) return;
 
