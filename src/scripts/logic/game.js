@@ -1,4 +1,4 @@
-import { GAME_LEVEL_CHARACTERS } from '../const';
+import { GAME_LEVEL_CHARACTERS } from '../const/game';
 
 // for dev purposes
 const MAX_ROUNDS = 5;
