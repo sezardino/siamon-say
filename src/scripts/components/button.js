@@ -1,5 +1,7 @@
 // @ts-nocheck
 
+import { createElement } from '../utils/create-element';
+
 const BASIC_BUTTON_STYLES =
   'px-6 py-2 text-white rounded-lg hover:opacity-90 focus:outline-none focus:ring-2 transition-all duration-300 disabled:bg-opacity-40';
 
@@ -70,11 +72,13 @@ export class Button {
    * @returns {HTMLElement} The button DOM element.
    */
   createButton() {
-    const button = document.createElement('button');
-    button.textContent = this.text;
-
     const variantStyles = this.getVariantStyles();
-    button.className = `${BASIC_BUTTON_STYLES} ${variantStyles}`;
+
+    const button = createElement(
+      'button',
+      `${BASIC_BUTTON_STYLES} ${variantStyles}`,
+      this.text
+    );
 
     Object.keys(this.additionalAttributes).forEach((key) => {
       button.setAttribute(key, this.additionalAttributes[key]);

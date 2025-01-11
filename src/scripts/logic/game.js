@@ -1,7 +1,7 @@
 import { GAME_LEVEL_CHARACTERS } from '../const';
 
 // for dev purposes
-const MAX_ROUNDS = 2;
+const MAX_ROUNDS = 5;
 
 export class GameState {
   constructor(level) {

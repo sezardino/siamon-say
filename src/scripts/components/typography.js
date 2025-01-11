@@ -1,3 +1,5 @@
+import { createElement } from '../utils/create-element';
+
 const TYPOGRAPHY_STYLES = {
   xs: 'text-xs',
   sm: 'text-sm',
@@ -55,12 +57,8 @@ export class Typography {
    * @returns {HTMLElement} The typography DOM element.
    */
   createTypographyElement() {
-    const element = document.createElement(this.level);
-
-    element.textContent = this.text;
-
     const baseStyles = `${TYPOGRAPHY_STYLES[this.size]}${headingTags.includes(this.level) ? ' font-bold' : ''}`;
-    element.className = baseStyles;
+    const element = createElement(this.level, baseStyles, this.text);
 
     if (this.customStyles) {
       element.classList.add(...this.customStyles.split(' '));

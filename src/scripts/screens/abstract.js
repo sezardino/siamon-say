@@ -1,3 +1,5 @@
+import { createElement } from '../utils/create-element';
+
 export class AbstractScreen {
   /**
    * Creates an HTML element with specified attributes and content.
@@ -18,21 +20,7 @@ export class AbstractScreen {
    * const container = this.createElement('div', 'container', '', { id: 'main-container' });
    */
   createElement(tag, className, textContent = '', attributes = {}) {
-    const element = document.createElement(tag);
-    element.className = className;
-    element.textContent = textContent;
-
-    Object.entries(attributes).forEach(([key, value]) => {
-      if (key === 'dataset') {
-        Object.entries(value).forEach(([dataKey, dataValue]) => {
-          element.dataset[dataKey] = dataValue;
-        });
-      } else {
-        element[key] = value;
-      }
-    });
-
-    return element;
+    return createElement(tag, className, textContent, attributes);
   }
 
   /**
