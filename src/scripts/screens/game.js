@@ -83,14 +83,12 @@ export class GameScreen extends AbstractScreen {
   startNewRound(sequence, round) {
     if (!this.sequenceContainer || !this.roundCounter) return;
 
-    // Disable input during sequence display
     this.isPreventInput = true;
     this.sequenceInput.disabled = true;
     this.updateSequenceInput('');
     this.roundCounter.textContent = `Round: ${round}`;
     this.sequenceInput.classList.remove('bg-yellow-100');
 
-    // for debug and cross-check purposes
     console.log(`Round ${round}, current sequence: ${sequence}`);
 
     const wrapper = this.createElement(
@@ -116,7 +114,8 @@ export class GameScreen extends AbstractScreen {
 
       setTimeout(() => {
         charElement.classList.add('opacity-100');
-      }, index * 200);
+        this.highlightKey(char);
+      }, index * 400);
     });
 
     this.sequenceContainer.appendChild(wrapper);
@@ -125,11 +124,21 @@ export class GameScreen extends AbstractScreen {
       wrapper.classList.remove('opacity-100');
       wrapper.classList.add('opacity-0');
 
-      // Enable input after sequence display
       this.isPreventInput = false;
       this.sequenceInput.disabled = false;
       this.sequenceInput.classList.add('bg-yellow-100');
-    }, characters.length * 400); // Ensure enough time before enabling input
+    }, characters.length * 400);
+  }
+
+  highlightKey(key) {
+    const button = this.getButtonByKey(key);
+    if (!button) return;
+
+    button.classList.add('!bg-blue-500', 'text-white');
+
+    setTimeout(() => {
+      button.classList.remove('!bg-blue-500', 'text-white');
+    }, 300);
   }
 
   userInputHandler(key) {
