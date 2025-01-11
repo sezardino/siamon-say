@@ -310,7 +310,7 @@ export class GameScreen extends AbstractScreen {
 
     const buttonsContainer = this.createElement(
       'div',
-      'mt-4 flex flex-wrap gap-2 items-center'
+      'mt-4 flex flex-wrap gap-2 items-center justify-center'
     );
 
     this.repeatButton = new Button(
