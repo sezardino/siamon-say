@@ -54,9 +54,17 @@ export class IdleScreen extends AbstractScreen {
     const startButton = new Button('Start', 'primary', startGameHandler)
       .element;
 
+    const link = this.createElement(
+      'a',
+      'text-center mt-10 text-blue-500 hover:underline',
+      'public repository',
+      { href: 'https://github.com/sezardino/siamon-say' }
+    );
+
     container.appendChild(title);
     container.appendChild(levelSelector);
     container.appendChild(startButton);
+    container.appendChild(link);
 
     return container;
   }
