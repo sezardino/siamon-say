@@ -135,10 +135,14 @@ export class GameScreen extends AbstractScreen {
     this.updateSequenceInput('');
     this.sequenceInput.classList.remove('bg-yellow-100');
 
-    this.repeatButton.disabled = isRepeat;
     this.repeatButton.classList.remove('animate-tada');
 
+    this.repeatButton.disabled = true;
+    this.newGameButton.disabled = true;
+
     this.renderSequenceAnimation(sequence, () => {
+      this.repeatButton.disabled = isRepeat;
+      this.newGameButton.disabled = false;
       this.isPreventInput = false;
       this.sequenceInput.disabled = false;
       this.sequenceInput.classList.add('bg-yellow-100');
@@ -256,10 +260,14 @@ export class GameScreen extends AbstractScreen {
       { disabled: true }
     ).element;
 
+    this.newGameButton = new Button(
+      'New Game',
+      'green',
+      onNewGameClick
+    ).element;
+
     buttonsContainer.appendChild(this.repeatButton);
-    buttonsContainer.appendChild(
-      new Button('New Game', 'green', onNewGameClick).element
-    );
+    buttonsContainer.appendChild(this.newGameButton);
 
     container.appendChild(
       new Typography(
