@@ -72,7 +72,7 @@ export class GameScreen extends AbstractScreen {
 
   addKeyAnimation(button) {
     this.addTempClasses(button, ['animate-tada'], 1000);
-    this.addTempClasses(button, ['bg-blue-500', 'text-white'], 200);
+    this.addTempClasses(button, ['!bg-yellow-500', 'text-white'], 200);
   }
 
   resetScreen() {
