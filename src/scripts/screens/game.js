@@ -81,25 +81,7 @@ export class GameScreen extends AbstractScreen {
     this.updateSequenceInput('');
   }
 
-  startNewRound(sequence, round, isRepeat = false) {
-    if (!this.sequenceContainer || !this.roundCounter) return;
-
-    if (!isRepeat) {
-      console.log(`Round ${round}, current sequence: ${sequence}`);
-      this.roundCounter.textContent = `Round: ${round}`;
-      this.round = round;
-    } else {
-      this.setExtraLive(false);
-    }
-
-    this.isPreventInput = true;
-    this.sequenceInput.disabled = true;
-    this.updateSequenceInput('');
-    this.sequenceInput.classList.remove('bg-yellow-100');
-
-    this.repeatButton.disabled = isRepeat;
-    this.repeatButton.classList.remove('animate-tada');
-
+  renderSequenceAnimation(sequence, onFinishAnimation) {
     const wrapper = this.createElement(
       'div',
       'transition-opacity duration-1000 ease-in-out'
@@ -133,10 +115,34 @@ export class GameScreen extends AbstractScreen {
       wrapper.classList.remove('opacity-100');
       wrapper.classList.add('opacity-0');
 
+      onFinishAnimation();
+    }, sequence.length * 400);
+  }
+
+  startNewRound(sequence, round, isRepeat = false) {
+    if (!this.sequenceContainer || !this.roundCounter) return;
+
+    if (!isRepeat) {
+      console.log(`Round ${round}, current sequence: ${sequence}`);
+      this.roundCounter.textContent = `Round: ${round}`;
+      this.round = round;
+    } else {
+      this.setExtraLive(false);
+    }
+
+    this.isPreventInput = true;
+    this.sequenceInput.disabled = true;
+    this.updateSequenceInput('');
+    this.sequenceInput.classList.remove('bg-yellow-100');
+
+    this.repeatButton.disabled = isRepeat;
+    this.repeatButton.classList.remove('animate-tada');
+
+    this.renderSequenceAnimation(sequence, () => {
       this.isPreventInput = false;
       this.sequenceInput.disabled = false;
       this.sequenceInput.classList.add('bg-yellow-100');
-    }, characters.length * 400);
+    });
   }
 
   highlightKey(key) {
