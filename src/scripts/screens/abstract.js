@@ -34,4 +34,28 @@ export class AbstractScreen {
 
     return element;
   }
+
+  /**
+   * Temporarily adds a set of CSS classes to a DOM element and removes them after a specified delay.
+   *
+   * @param {HTMLElement} element - The DOM element to which the classes will be added.
+   * @param {string[]} classesArr - An array of CSS class names to add to the element.
+   * @param {number} removeDelay - The time in milliseconds after which the classes will be removed.
+   *
+   * @example
+   * // Add 'highlight' and 'active' classes to a button for 2 seconds
+   * const button = document.querySelector('#myButton');
+   * addTempClasses(button, ['highlight', 'active'], 2000);
+   *
+   * @example
+   * // Add a single class 'fade-in' to an element for 1 second
+   * const element = document.querySelector('#myElement');
+   * addTempClasses(element, ['fade-in'], 1000);
+   */
+  addTempClasses(element, classesArr, removeDelay) {
+    element.classList.add(...classesArr);
+    setTimeout(() => {
+      element.classList.remove(...classesArr);
+    }, removeDelay);
+  }
 }

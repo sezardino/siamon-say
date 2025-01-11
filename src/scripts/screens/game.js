@@ -36,7 +36,7 @@ export class GameScreen extends AbstractScreen {
   createSequenceInput() {
     return this.createElement(
       'input',
-      'text-xl text-center p-2 border-2 border-gray-300 rounded-lg w-64 uppercase',
+      'text-xl text-center p-2 border-2 border-gray-300 rounded-lg w-64 uppercase transition-all duration-300',
       '',
       { disabled: true }
     );
@@ -72,7 +72,7 @@ export class GameScreen extends AbstractScreen {
 
     const container = this.createElement(
       'div',
-      'mt-4 flex flex-wrap gap-2 justify-center'
+      'mt-4 flex flex-wrap gap-2 justify-center max-w-[800px]'
     );
 
     keys.forEach((key) => {
@@ -82,6 +82,7 @@ export class GameScreen extends AbstractScreen {
         key,
         { dataset: { key } }
       );
+
       container.appendChild(button);
     });
 
@@ -89,26 +90,16 @@ export class GameScreen extends AbstractScreen {
       const key = evt.target.dataset.key;
       if (key) {
         this.userInputHandler(key);
-        this.addKeyHighlight(evt.target);
-        this.addPulseAnimation(evt.target);
+        this.addKeyAnimation(evt.target);
       }
     });
 
     return container;
   }
 
-  addPulseAnimation(button) {
-    button.classList.add('animate-tada');
-    setTimeout(() => {
-      button.classList.remove('animate-tada');
-    }, 1000);
-  }
-
-  addKeyHighlight(button) {
-    button.classList.add('bg-blue-500', 'text-white');
-    setTimeout(() => {
-      button.classList.remove('bg-blue-500', 'text-white');
-    }, 200);
+  addKeyAnimation(button) {
+    this.addTempClasses(button, ['animate-tada'], 1000);
+    this.addTempClasses(button, ['bg-blue-500', 'text-white'], 200);
   }
 
   resetScreen() {
@@ -194,15 +185,9 @@ export class GameScreen extends AbstractScreen {
   updateSequenceInput(input) {
     if (!this.sequenceInput) return;
 
-    this.sequenceInput.classList.add(
-      'bg-yellow-100',
-      'transition-all',
-      'duration-300'
-    );
+    this.sequenceInput.classList.add('transition-all', 'duration-300');
 
-    setTimeout(() => {
-      this.sequenceInput.classList.remove('bg-yellow-100');
-    }, 300);
+    this.addTempClasses(this.sequenceInput, ['bg-yellow-100'], 300);
 
     this.sequenceInput.style.transform = 'scale(1.1)';
     setTimeout(() => {
@@ -228,10 +213,7 @@ export class GameScreen extends AbstractScreen {
 
       this.userInputHandler(key);
       const button = this.getButtonByKey(key);
-      if (button) {
-        this.addKeyHighlight(button);
-        this.addPulseAnimation(button);
-      }
+      if (button) this.addKeyAnimation(button);
 
       setTimeout(() => {
         this.isKeyPressed = false;
