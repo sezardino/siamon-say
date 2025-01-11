@@ -83,6 +83,7 @@ export class GameScreen extends AbstractScreen {
   }
 
   addKeyAnimation(button) {
+    if (this.isPreventInput) return;
     this.addTempClasses(button, [TADA_ANIMATION], 1000);
     this.addTempClasses(
       button,
@@ -186,6 +187,7 @@ export class GameScreen extends AbstractScreen {
   }
 
   highlightKey(key) {
+    if (this.isPreventInput) return;
     const button = this.getButtonByKey(key);
     if (!button) return;
 
