@@ -1,7 +1,8 @@
 // @ts-nocheck
+
 import { Button } from '../components/button';
 import { Typography } from '../components/typography';
-import { GAME_LEVELS, GAME_LEVELS_COPY } from '../const';
+import { GAME_LEVELS, GAME_LEVELS_COPY } from '../const/game';
 import { AbstractScreen } from './abstract';
 
 export class IdleScreen extends AbstractScreen {

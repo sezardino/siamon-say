@@ -1,7 +1,8 @@
 // @ts-nocheck
+
 import { Button } from '../components/button';
 import { Typography } from '../components/typography';
-import { GAME_LEVEL_CHARACTERS, GAME_LEVELS_COPY } from '../const';
+import { GAME_LEVEL_CHARACTERS, GAME_LEVELS_COPY } from '../const/game';
 import { AbstractScreen } from './abstract';
 
 export class GameScreen extends AbstractScreen {
@@ -56,6 +57,8 @@ export class GameScreen extends AbstractScreen {
     });
 
     container.addEventListener('click', (evt) => {
+      if (!evt.target) return;
+
       const key = evt.target.dataset.key;
       if (key) {
         this.userInputHandler(key);
@@ -78,6 +81,8 @@ export class GameScreen extends AbstractScreen {
   }
 
   startNewRound(sequence, round) {
+    if (!this.sequenceContainer || !this.roundCounter) return;
+
     const wrapper = this.createElement(
       'div',
       'transition-opacity duration-1000 ease-in-out'
@@ -128,6 +133,8 @@ export class GameScreen extends AbstractScreen {
   }
 
   stopGame(hasExtraLive) {
+    if (!this.repeatButton || !this.sequenceInput) return;
+
     this.isPreventInput = true;
     if (hasExtraLive) {
       this.repeatButton.disabled = false;
@@ -137,6 +144,8 @@ export class GameScreen extends AbstractScreen {
   }
 
   handleRetrySequence() {
+    if (!this.repeatButton || !this.sequenceInput) return;
+
     this.updateSequenceInput('');
     this.repeatButton.disabled = true;
     this.sequenceInput.classList.remove('bg-red-100', 'border-red-500');
@@ -153,6 +162,8 @@ export class GameScreen extends AbstractScreen {
 
     this.sequenceInput.style.transform = 'scale(1.1)';
     setTimeout(() => {
+      if (!this.sequenceInput) return;
+
       this.sequenceInput.style.transform = 'scale(1)';
     }, 300);
 
