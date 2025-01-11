@@ -83,6 +83,9 @@ export class GameScreen extends AbstractScreen {
   startNewRound(sequence, round) {
     if (!this.sequenceContainer || !this.roundCounter) return;
 
+    // for debug and cross-check purposes
+    console.log(`Round ${round}, current sequence: ${sequence}`);
+
     const wrapper = this.createElement(
       'div',
       'transition-opacity duration-1000 ease-in-out'

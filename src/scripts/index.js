@@ -85,7 +85,7 @@ class SimonSays {
 
     const screen = new ResultScreen(isSuccess, this.gameState.round);
     const resultScreenElement = screen.render(
-      () => this.startGame(this.gameState.level),
+      () => this.startGame(this.gameState?.level),
       this.init
     );
     this.renderScreen(resultScreenElement);

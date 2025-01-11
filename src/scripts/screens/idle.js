@@ -34,6 +34,16 @@ export class IdleScreen extends AbstractScreen {
       'h1',
       'text-center mb-6'
     ).element;
+
+    const hint = new Typography(
+      '?',
+      '4xl',
+      'span',
+      'cursor-pointer ml-2 border inline-flex items-center border-blue-400 justify-center h-12 w-12 rounded-full'
+    ).element;
+    hint.title =
+      'To check, you can open the developer console where the current sequence will be displayed. We do not recommend using prompts if you want to test your skills.';
+    title.appendChild(hint);
     const levelSelector = this.createLevelSelect();
 
     const startGameHandler = () => {
