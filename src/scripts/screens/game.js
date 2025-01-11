@@ -31,9 +31,9 @@ export class GameScreen extends AbstractScreen {
   createSequenceInput() {
     return this.createElement(
       'input',
-      'text-xl text-center p-2 border-2 border-gray-300 rounded-lg w-64 uppercase transition-all duration-300',
+      'text-xl text-center p-2 border-2 border-gray-300 rounded-lg w-64 uppercase transition-all duration-300 disabled:opacity-40',
       '',
-      { disabled: true }
+      { readOnly: true }
     );
   }
 
@@ -83,6 +83,13 @@ export class GameScreen extends AbstractScreen {
   startNewRound(sequence, round) {
     if (!this.sequenceContainer || !this.roundCounter) return;
 
+    // Disable input during sequence display
+    this.isPreventInput = true;
+    this.sequenceInput.disabled = true;
+    this.updateSequenceInput('');
+    this.roundCounter.textContent = `Round: ${round}`;
+    this.sequenceInput.classList.remove('bg-yellow-100');
+
     // for debug and cross-check purposes
     console.log(`Round ${round}, current sequence: ${sequence}`);
 
@@ -94,6 +101,7 @@ export class GameScreen extends AbstractScreen {
     this.sequenceContainer.innerHTML = '';
 
     const characters = sequence.split('');
+
     characters.forEach((char, index) => {
       const charElement = new Typography(
         char,
@@ -116,15 +124,16 @@ export class GameScreen extends AbstractScreen {
     setTimeout(() => {
       wrapper.classList.remove('opacity-100');
       wrapper.classList.add('opacity-0');
-    }, 2000);
 
-    this.isPreventInput = false;
-    this.updateSequenceInput('');
-    this.roundCounter.textContent = `Round: ${round}`;
+      // Enable input after sequence display
+      this.isPreventInput = false;
+      this.sequenceInput.disabled = false;
+      this.sequenceInput.classList.add('bg-yellow-100');
+    }, characters.length * 400); // Ensure enough time before enabling input
   }
 
   userInputHandler(key) {
-    if (this.isPreventInput || !this.sequenceInput) return;
+    if (this.isPreventInput || !this.sequenceInput) return; // Prevent input if disabled
 
     const validCharacters = GAME_LEVEL_CHARACTERS[this.level];
 
@@ -160,8 +169,6 @@ export class GameScreen extends AbstractScreen {
     if (!this.sequenceInput) return;
 
     this.sequenceInput.classList.add('transition-all', 'duration-300');
-
-    this.addTempClasses(this.sequenceInput, ['bg-yellow-100'], 300);
 
     this.sequenceInput.style.transform = 'scale(1.1)';
     setTimeout(() => {
