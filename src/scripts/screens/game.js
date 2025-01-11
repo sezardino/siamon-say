@@ -91,6 +91,9 @@ export class GameScreen extends AbstractScreen {
 
     console.log(`Round ${round}, current sequence: ${sequence}`);
 
+    this.repeatButton.disabled = false;
+    this.repeatButton.classList.remove('animate-tada');
+
     const wrapper = this.createElement(
       'div',
       'transition-opacity duration-1000 ease-in-out'
@@ -114,8 +117,8 @@ export class GameScreen extends AbstractScreen {
 
       setTimeout(() => {
         charElement.classList.add('opacity-100');
-        this.highlightKey(char);
-      }, index * 400);
+        this.highlightKey(char); // Выделение кнопки на виртуальной клавиатуре
+      }, index * 200);
     });
 
     this.sequenceContainer.appendChild(wrapper);

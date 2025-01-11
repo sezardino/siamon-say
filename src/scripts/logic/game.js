@@ -44,6 +44,7 @@ export class GameState {
     if (this.round < MAX_ROUNDS) {
       this.round += 1;
       this.generateSequence();
+      this.hasExtraLive = true;
       return 'continue';
     }
     return 'finished';

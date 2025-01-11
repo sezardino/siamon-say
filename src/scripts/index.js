@@ -73,7 +73,7 @@ class SimonSays {
     if (!this.gameScreen || !this.gameState) return;
 
     if (this.gameState.hasExtraLive) {
-      this.gameScreen.stopGame(true); // Retry button enabled
+      this.gameScreen.stopGame(true);
       this.gameState.hasExtraLive = false;
     } else {
       this.finishGame(false);
