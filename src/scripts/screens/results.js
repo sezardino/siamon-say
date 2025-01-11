@@ -1,3 +1,4 @@
+import { Button } from '../components/button';
 import { AbstractScreen } from './abstract';
 
 export class ResultScreen extends AbstractScreen {
@@ -17,30 +18,6 @@ export class ResultScreen extends AbstractScreen {
     );
   }
 
-  createPlayAgainButton(onClick) {
-    const button = this.createElement(
-      'button',
-      'px-6 py-2 bg-green-500 text-white rounded-lg mt-4',
-      'Play Again'
-    );
-
-    button.addEventListener('click', onClick);
-
-    return button;
-  }
-
-  createResetGameButton(onClick) {
-    const button = this.createElement(
-      'button',
-      'px-6 py-2 bg-yellow-500 text-white rounded-lg mt-4',
-      'Change Difficulty'
-    );
-
-    button.addEventListener('click', onClick);
-
-    return button;
-  }
-
   render(onPlayAgainClick, onResetClick) {
     const container = this.createElement(
       'div',
@@ -48,12 +25,25 @@ export class ResultScreen extends AbstractScreen {
     );
 
     const message = this.createTitle();
-    const playAgainButton = this.createPlayAgainButton(onPlayAgainClick);
-    const resetGameButton = this.createResetGameButton(onResetClick);
+
+    const buttonsContainer = this.createElement(
+      'div',
+      'mt-4 flex flex-wrap gap-2 items-center'
+    );
+
+    const playAgainButton = new Button('Play Again', 'green', onPlayAgainClick)
+      .element;
+    const resetGameButton = new Button(
+      'Change difficulty',
+      'yellow',
+      onResetClick
+    ).element;
+
+    buttonsContainer.appendChild(playAgainButton);
+    buttonsContainer.appendChild(resetGameButton);
 
     container.appendChild(message);
-    container.appendChild(playAgainButton);
-    container.appendChild(resetGameButton);
+    container.appendChild(buttonsContainer);
 
     return container;
   }

@@ -1,4 +1,5 @@
 // @ts-nocheck
+import { Button } from '../components/button';
 import { GAME_LEVEL_CHARACTERS, GAME_LEVELS_COPY } from '../const';
 import { AbstractScreen } from './abstract';
 
@@ -40,31 +41,6 @@ export class GameScreen extends AbstractScreen {
       '',
       { disabled: true }
     );
-  }
-
-  createRepeatButton() {
-    const button = this.createElement(
-      'button',
-      'px-6 py-2 bg-yellow-500 text-white rounded-lg mt-4 disabled:bg-opacity-40',
-      'Repeat the Sequence',
-      { disabled: true }
-    );
-
-    button.addEventListener('click', this.handleRetrySequence);
-
-    return button;
-  }
-
-  createNewGameButton(onNewGameClick) {
-    const button = this.createElement(
-      'button',
-      'px-6 py-2 bg-green-500 text-white rounded-lg mt-4',
-      'New Game'
-    );
-
-    button.addEventListener('click', onNewGameClick);
-
-    return button;
   }
 
   createVirtualKeyboard(level) {
@@ -229,21 +205,36 @@ export class GameScreen extends AbstractScreen {
       'flex flex-col items-center justify-center min-h-screen p-6'
     );
 
-    container.appendChild(this.createLevelIndicator());
     this.roundCounter = this.createRoundCounter();
-    container.appendChild(this.roundCounter);
 
     this.sequenceContainer = this.createSequenceContainer();
-    container.appendChild(this.sequenceContainer);
 
     this.sequenceInput = this.createSequenceInput();
+
+    const buttonsContainer = this.createElement(
+      'div',
+      'mt-4 flex flex-wrap gap-2 items-center'
+    );
+
+    this.repeatButton = new Button(
+      'Repeat the Sequence',
+      'yellow',
+      this.handleRetrySequence,
+      { disabled: true }
+    ).element;
+
+    buttonsContainer.appendChild(this.repeatButton);
+    buttonsContainer.appendChild(
+      new Button('New Game', 'green', onNewGameClick).element
+    );
+
+    container.appendChild(this.createLevelIndicator());
+    container.appendChild(this.roundCounter);
+    container.appendChild(this.sequenceContainer);
     container.appendChild(this.sequenceInput);
 
     container.appendChild(this.createVirtualKeyboard(this.level));
-    this.repeatButton = this.createRepeatButton();
-    container.appendChild(this.repeatButton);
-
-    container.appendChild(this.createNewGameButton(onNewGameClick));
+    container.appendChild(buttonsContainer);
 
     this.addEventListeners();
 

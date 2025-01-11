@@ -1,4 +1,5 @@
 // @ts-nocheck
+import { Button } from '../components/button';
 import { GAME_LEVELS, GAME_LEVELS_COPY } from '../const';
 import { AbstractScreen } from './abstract';
 
@@ -27,18 +28,6 @@ export class IdleScreen extends AbstractScreen {
     return select;
   }
 
-  createStartButton(onClick) {
-    const button = this.createElement(
-      'button',
-      'px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500',
-      'Start'
-    );
-
-    button.addEventListener('click', onClick);
-
-    return button;
-  }
-
   render(onStartGame) {
     const container = this.createElement(
       'div',
@@ -53,7 +42,8 @@ export class IdleScreen extends AbstractScreen {
       onStartGame(level);
     };
 
-    const startButton = this.createStartButton(startGameHandler);
+    const startButton = new Button('Start', 'primary', startGameHandler)
+      .element;
 
     container.appendChild(title);
     container.appendChild(levelSelector);
