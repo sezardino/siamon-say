@@ -49,4 +49,8 @@ export class GameState {
     }
     return 'finished';
   }
+
+  setExtraLive(value) {
+    this.hasExtraLive = value;
+  }
 }

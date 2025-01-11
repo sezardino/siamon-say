@@ -31,7 +31,10 @@ class SimonSays {
     this.gameState.generateSequence();
 
     if (!this.gameScreen) {
-      this.gameScreen = new GameScreen(this.validateUserInput);
+      this.gameScreen = new GameScreen(
+        this.validateUserInput,
+        this.gameState.setExtraLive
+      );
     }
 
     const gameScreenElement = this.gameScreen.render(this.init, level);

@@ -6,9 +6,10 @@ import { GAME_LEVEL_CHARACTERS, GAME_LEVELS_COPY } from '../const/game';
 import { AbstractScreen } from './abstract';
 
 export class GameScreen extends AbstractScreen {
-  constructor(onValidateUserInput) {
+  constructor(onValidateUserInput, setExtraLive) {
     super();
     this.onValidateUserInput = onValidateUserInput;
+    this.setExtraLive = setExtraLive;
     this.isKeyPressed = false;
     this.isPreventInput = false;
     this.userInput = '';
@@ -80,18 +81,23 @@ export class GameScreen extends AbstractScreen {
     this.updateSequenceInput('');
   }
 
-  startNewRound(sequence, round) {
+  startNewRound(sequence, round, isRepeat = false) {
     if (!this.sequenceContainer || !this.roundCounter) return;
+
+    if (!isRepeat) {
+      console.log(`Round ${round}, current sequence: ${sequence}`);
+      this.roundCounter.textContent = `Round: ${round}`;
+      this.round = round;
+    } else {
+      this.setExtraLive(false);
+    }
 
     this.isPreventInput = true;
     this.sequenceInput.disabled = true;
     this.updateSequenceInput('');
-    this.roundCounter.textContent = `Round: ${round}`;
     this.sequenceInput.classList.remove('bg-yellow-100');
 
-    console.log(`Round ${round}, current sequence: ${sequence}`);
-
-    this.repeatButton.disabled = false;
+    this.repeatButton.disabled = isRepeat;
     this.repeatButton.classList.remove('animate-tada');
 
     const wrapper = this.createElement(
@@ -117,7 +123,7 @@ export class GameScreen extends AbstractScreen {
 
       setTimeout(() => {
         charElement.classList.add('opacity-100');
-        this.highlightKey(char); // Выделение кнопки на виртуальной клавиатуре
+        this.highlightKey(char);
       }, index * 200);
     });
 
@@ -145,7 +151,7 @@ export class GameScreen extends AbstractScreen {
   }
 
   userInputHandler(key) {
-    if (this.isPreventInput || !this.sequenceInput) return; // Prevent input if disabled
+    if (this.isPreventInput || !this.sequenceInput) return;
 
     const validCharacters = GAME_LEVEL_CHARACTERS[this.level];
 
@@ -175,6 +181,8 @@ export class GameScreen extends AbstractScreen {
     this.sequenceInput.classList.remove('bg-red-100', 'border-red-500');
     this.repeatButton.classList.remove('animate-tada');
     this.isPreventInput = false;
+
+    this.startNewRound(this.sequenceContainer.textContent, this.round, true);
   }
 
   updateSequenceInput(input) {
