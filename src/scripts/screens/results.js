@@ -1,4 +1,5 @@
 import { Button } from '../components/button';
+import { Typography } from '../components/typography';
 import { AbstractScreen } from './abstract';
 
 export class ResultScreen extends AbstractScreen {
@@ -9,13 +10,11 @@ export class ResultScreen extends AbstractScreen {
   }
 
   createTitle() {
-    return this.createElement(
-      'h2',
-      'text-3xl font-bold text-center',
-      this.isSuccess
-        ? `Congratulations! You passed Round ${this.round}`
-        : `Game Over! You failed Round ${this.round}`
-    );
+    const message = this.isSuccess
+      ? `Congratulations! You passed Round ${this.round}`
+      : `Game Over! You failed Round ${this.round}`;
+
+    return new Typography(message, '3xl', 'h2', 'text-center').element;
   }
 
   render(onPlayAgainClick, onResetClick) {

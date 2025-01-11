@@ -1,5 +1,6 @@
 // @ts-nocheck
 import { Button } from '../components/button';
+import { Typography } from '../components/typography';
 import { GAME_LEVEL_CHARACTERS, GAME_LEVELS_COPY } from '../const';
 import { AbstractScreen } from './abstract';
 
@@ -14,16 +15,8 @@ export class GameScreen extends AbstractScreen {
     this.handleRetrySequence = this.handleRetrySequence.bind(this);
   }
 
-  createLevelIndicator() {
-    return this.createElement(
-      'div',
-      'text-lg font-semibold',
-      `Level: ${GAME_LEVELS_COPY[this.level]}`
-    );
-  }
-
   createRoundCounter(round = 1) {
-    return this.createElement('div', 'text-xl font-bold', `Round: ${round}`);
+    return new Typography(`Round: ${round}`, 'xl', 'h2').element;
   }
 
   createSequenceContainer() {
@@ -94,11 +87,13 @@ export class GameScreen extends AbstractScreen {
 
     const characters = sequence.split('');
     characters.forEach((char, index) => {
-      const charElement = this.createElement(
+      const charElement = new Typography(
+        char,
+        'xl',
         'span',
-        'inline-block opacity-0 transition-opacity duration-300 ease-in-out',
-        char
-      );
+        'inline-block opacity-0 transition-opacity duration-300 ease-in-out'
+      ).element;
+
       wrapper.appendChild(charElement);
 
       charElement.style.animationDelay = `${index * 1000}ms`;
@@ -147,15 +142,6 @@ export class GameScreen extends AbstractScreen {
     this.sequenceInput.classList.remove('bg-red-100', 'border-red-500');
     this.repeatButton.classList.remove('animate-tada');
     this.isPreventInput = false;
-  }
-
-  getNewGameButton(onNewGameClick) {
-    const button = document.createElement('button');
-    button.textContent = 'New Game';
-    button.className = 'px-6 py-2 bg-green-500 text-white rounded-lg mt-4';
-    button.addEventListener('click', onNewGameClick);
-
-    return button;
   }
 
   updateSequenceInput(input) {
@@ -228,7 +214,14 @@ export class GameScreen extends AbstractScreen {
       new Button('New Game', 'green', onNewGameClick).element
     );
 
-    container.appendChild(this.createLevelIndicator());
+    container.appendChild(
+      new Typography(
+        `Level: ${GAME_LEVELS_COPY[this.level]}`,
+        'lg',
+        'p',
+        'font-semibold'
+      ).element
+    );
     container.appendChild(this.roundCounter);
     container.appendChild(this.sequenceContainer);
     container.appendChild(this.sequenceInput);
